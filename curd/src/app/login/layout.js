@@ -22,6 +22,9 @@ const Layout = ({ children }) => {
                 <li>
                     <Link href="/login/studentlogin" className="text-blue-600 hover:underline">Login Student</Link>
                 </li>
+                <li>
+                    <Link href="/login/shopping" className="text-blue-600 hover:underline">Shopping</Link>
+                </li>
             </ul> : <ul lassName="login-menu ">
                 <li className='bg-yellow-400 text-xl'>
                     <Link href="/" className= "text-red-900 font-bold p-4 m-6 hover:underline  hover:text-blue-700">Home</Link>

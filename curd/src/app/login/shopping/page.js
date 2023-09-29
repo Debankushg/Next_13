@@ -1,6 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,Suspense } from 'react'
 import { getEcomdata } from "../../api/getApi"
+import Image from 'next/image'
 
 const Shoppinglist = () => {
     const [data, setData] = useState([])
@@ -19,27 +20,26 @@ const Shoppinglist = () => {
         getDataAsync();
 
     }, [])
-    console.log(data,);
 
     return (
         <>
 
-            <div className="bg-gray-100 p-8">
+            {/* <div className="bg-gray-100 p-8"> */}
                 <h1 className="text-3xl font-bold text-center mb-8">Welcome to Our Store</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                     {data.map((e) => (
-                        <div key={e.id} className="bg-white rounded-lg overflow-hidden shadow-md p-6">
-                            <img src={e.image} alt="Product" className="w-full h-45 object-cover" />
+                        <div key={e.id} className="bg-white rounded-lg overflow-hidden shadow-md">
+                            <Image src={e.image} alt="Product" className="w-full h-60 object-cover p-4" width={200} height={10}/>
                             <div className="p-4">
                                 <h2 className="text-lg font-semibold">{e.category}</h2>
                                 <p className="text-gray-600">Price: ${e.price}</p>
-                                <div className="flex items-center mt-2 ">
-                                    <span className="text-yellow-400 flex flex-1 p-2 ">
+                                <div className="flex items-center mt-2">
+                                    <span className="text-yellow-400 flex items-center">
                                         {Array.from({ length: e.rating.rate }, (_, index) => (
                                             <svg
                                                 key={index}
                                                 xmlns="http://www.w3.org/2000/svg"
-                                                className="h-10 w-10 fill-current"
+                                                className="h-5 w-5 fill-current"
                                                 viewBox="0 0 20 20"
                                             >
                                                 <path
@@ -48,14 +48,22 @@ const Shoppinglist = () => {
                                                 />
                                             </svg>
                                         ))}
+                                        <span className="ml-1 text-gray-600 font-bold">{e.rating.rate}</span>
                                     </span>
-                                    <span className="ml-1 text-gray-600 font-bold">{e.rating.rate}</span>
+                                </div>
+                                <div className="mt-4 flex justify-between">
+                                    <button className="bg-amber-400 hover:bg-amber-700 text-white decoration-slate-400 font-bold py-2 px-4 rounded">
+                                        Buy Now
+                                    </button>
+                                    <button className="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+                                        Add to Cart
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
-            </div>
+            {/* </div> */}
 
         </>
     )

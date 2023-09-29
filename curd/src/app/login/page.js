@@ -21,7 +21,7 @@ const Login = () => {
         loginData()
     }, [])
 
-    console.log(login ,"LOG APi");
+
 
 
     return (

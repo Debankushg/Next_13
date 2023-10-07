@@ -21,7 +21,10 @@ const Login = () => {
         loginData()
     }, [])
 
-
+    const logIn = (e) => {
+        e.preventDefault()
+        console.log(login, "Login Data")
+    }
 
 
     return (
@@ -32,13 +35,13 @@ const Login = () => {
                     <form>
                         <div className="mb-4">
                             <label value="username" className="block text-gray-600">Username</label>
-                            <input type="text" id="username" name="username" className="w-full p-2 border rounded-md" />
+                            <input type="text" id="username" name="username" className="w-full p-2 border rounded-md" autoComplete='off'/>
                         </div>
                         <div className="mb-4">
                             <label value="password" className="block text-gray-600">Password</label>
-                            <input type="password" id="password" name="password" className="w-full p-2 border rounded-md" />
+                            <input type="password" id="password" name="password" className="w-full p-2 border rounded-md" autoComplete='off' />
                         </div>
-                        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300">Login</button>
+                        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300" onClick={logIn}>Login</button>
                     </form>
                 </div>
             </div>

@@ -33,5 +33,5 @@ export const loginApi = async () => {
       })
    })
       .then(res => res.json())
-      .then(console.log);
+      .then(console.log());
 }

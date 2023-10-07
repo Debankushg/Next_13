@@ -5,15 +5,7 @@ import { useRouter } from 'next/navigation'
 import './globals.css'
 
 export default function Home() {
-  console.log(process.env.NODE_ENV);
 
-  // const Deb = (data) => {
-  //   alert(data)
-  // }
-
-  // const InnerComponent = () => {
-  //   return (<h1>Inner component</h1>)
-  // }
   const router = useRouter()
   const navigate = (routeName) => {
     router.push(routeName)
@@ -26,14 +18,14 @@ export default function Home() {
         onClick={() => router.push('/login')}
         className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-2"
       >
-        Go to Log-in Page
+       Log-in 
       </button>
       <br />
       <button
-        onClick={() => navigate('/about')}
+        onClick={() => navigate('/signup')}
         className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md mb-2"
       >
-        Go to About Page
+        Register Yourself
       </button>
       <ul>
         <li>

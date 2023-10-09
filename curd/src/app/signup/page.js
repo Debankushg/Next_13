@@ -34,7 +34,7 @@ const RegistrationPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let res = await fetch("http://localhost:3000/api/server", {
+        let res = await fetch("http://localhost:3002/api/server", {
             method: "Post",
             body: JSON.stringify({ formData })
         })

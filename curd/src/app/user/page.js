@@ -3,7 +3,7 @@ import React from 'react'
 import DeleteUser from '../../util/DeleteUser';
 
 const getUser = async () => {
-    let data = await fetch("http://localhost:3000/api/server");
+    let data = await fetch("http://localhost:3002/api/server");
     data = await data.json();
     return data
 }

@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
     return (
         <div>
 
-            {pathname !== "/login/studentlogin" ? <ul className="flex space-x-4 login-menu">
+            {pathname !== "/login" ? <ul className="flex space-x-4 login-menu">
                 <li>
                     <h4 className="text-lg font-bold">Login Navbar</h4>
                 </li>
@@ -25,9 +25,12 @@ const Layout = ({ children }) => {
                 <li>
                     <Link href="/login/shopping" className="text-blue-600 hover:underline">Shopping</Link>
                 </li>
-            </ul> : <ul lassName="login-menu ">
-                <li className='bg-yellow-400 text-xl'>
-                    <Link href="/" className= "text-red-900 font-bold p-4 m-6 hover:underline  hover:text-blue-700">Home</Link>
+            </ul> : <ul className="flex space-x-4 login-menu ">
+                <li>
+                    <h4 className="text-lg font-bold">Login Navbar</h4>
+                </li>
+                <li>
+                    <Link href="/" className="text-red-900 font-bold p-4 m-6 hover:underline  hover:text-blue-700">Home</Link>
                 </li>
             </ul>}
 

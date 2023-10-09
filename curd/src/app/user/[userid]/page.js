@@ -2,7 +2,7 @@ import React from 'react'
 
 
 const getUser = async (id) => {
-    let data = await fetch(`http://localhost:3000/api/server/${id}`);
+    let data = await fetch(`http://localhost:3002/api/server/${id}`);
     data = await data.json();
     return data.result
 

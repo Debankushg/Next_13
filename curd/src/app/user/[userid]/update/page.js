@@ -12,7 +12,7 @@ const Update = ({ params }) => {
     }, [])
 
     const getUserDetails = async () => {
-        let data = await fetch("http://localhost:3000/api/server/" + id)
+        let data = await fetch("http://localhost:3002/api/server/" + id)
         data = await data.json()
         setName(data.result.name)
         setEmail(data.result.email)
@@ -20,7 +20,7 @@ const Update = ({ params }) => {
     }
 
     const updateUser = async () => {
-        let result = await fetch("http://localhost:3000/api/server/" + id, {
+        let result = await fetch("http://localhost:3002/api/server/" + id, {
             method: "PUT",
             body: JSON.stringify({ name, phone, email })
         })

@@ -1,13 +1,20 @@
 
 
-export const fetchData = () => {
-   return fetch("https://jsonplaceholder.typicode.com/posts").then(res => {
-      return res.json()
-   }).then(data => {
+export const fetchData = async () => {
+   // return fetch("https://jsonplaceholder.typicode.com/posts").then(res => {
+   //    return res.json()
+   // }).then(data => {
+   //    return data
+   // }).catch(error => {
+   //    console.error('There was a problem with the fetch operation:', error);
+   // })
+   try {
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts")
+      const data = await res.json()
       return data
-   }).catch(error => {
+   } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
-   })
+   }
 };
 
 
@@ -22,16 +29,23 @@ export const getEcomdata = async () => {
 }
 
 
-export const loginApi = async () => {
-   fetch('https://dummyjson.com/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-         username: 'kminchelle',
-         password: '0lelplR',
-         // expiresInMins: 60, // optional
+export const loginApi = async (login) => {
+   try {
+      const response = await fetch('https://dummyjson.com/auth/login', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(
+            // username: 'kminchelle',
+            // password: '0lelplR',
+            // expiresInMins: 60, // optional
+            login
+         )
       })
-   })
-      .then(res => res.json())
-      .then(console.log());
+      const data = await response.json();
+      return data
+   } catch (err) {
+      console.error('Login error:', err);
+      throw err;
+   }
+
 }

@@ -2,7 +2,8 @@
 import React, { useEffect, useState, Suspense } from 'react'
 import { getEcomdata } from "../../api/getApi"
 import { useDispatch, useSelector } from "react-redux";
-import { toggleCart } from "../../redux/slice"
+import { toggleCart, addItem } from "../../redux/slice"
+import Cart from "./pages"
 import Image from 'next/image'
 
 const Shoppinglist = () => {
@@ -16,13 +17,15 @@ const Shoppinglist = () => {
         dispatch(toggleCart(open));
     };
 
-
     useEffect(() => {
 
         const getDataAsync = async () => {
             try {
                 const data = await getEcomdata();
-                setData(data)
+                const actualData = data.map((e) => {
+                    return { ...e, price: ((e.price) * 84).toFixed(0), quantity: 1 }
+                })
+                setData(actualData)
             } catch (error) {
 
             }
@@ -31,17 +34,18 @@ const Shoppinglist = () => {
 
     }, [])
 
-    const handleAddToCart = () => {
-        const item = { ...props };
-        dispatch(addItem(item));
 
+    
+    const handleAddToCart = (e) => {
+        dispatch(addItem(e));
         setIsAdded(true);
-
         setTimeout(() => {
             setIsAdded(false);
         }, 300);
     }
     const cartQuantity = cartItems.length;
+
+
     return (
         <>
             <div className="bg-gray-100 py-8">
@@ -52,6 +56,7 @@ const Shoppinglist = () => {
                             className="cart_icon relative cursor-pointer"
                             onClick={() => handleOpenCart(true)}
                         >
+                            {cartItems ? 'Close Cart' : 'Open Cart'}
                             <Image
                                 width={50}
                                 height={50}
@@ -61,6 +66,7 @@ const Shoppinglist = () => {
                             <span className="badge absolute top-0 right-0 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold">
                                 {cartQuantity}
                             </span>
+                            {cartItems && <Cart />}
                         </div>
                     </div>
                     <div className="text-center mb-8">
@@ -103,7 +109,7 @@ const Shoppinglist = () => {
                                         </button>
                                         <button
                                             className="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-                                            onClick={handleAddToCart}
+                                            onClick={() => handleAddToCart(e)}
                                         >
                                             {isAdded ? 'Added' : 'Add to Cart'}
                                         </button>

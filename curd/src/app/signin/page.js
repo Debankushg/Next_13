@@ -6,19 +6,40 @@ import Link from 'next/link'
 import styles from "./form.module.css"
 import Image from 'next/image'
 import { HiAtSymbol, HiFingerPrint } from 'react-icons/hi'
-import { signIn, signOut } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useRouter } from 'next/navigation'
+import { useFormik } from 'formik'
+import login_validate from "../../lib/validate"
 
 const Signin = () => {
 
     const [show, setShow] = useState(false)
     const router = useRouter()
     const navigate = (routeName) => {
-      router.push(routeName)
+        router.push(routeName)
     }
+    const handleSubmit = (values) => {
+        console.log(values);
+    }
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: ""
+        },
+        validate: login_validate,
+        onSubmit: handleSubmit
+    })
 
+
+
+
+    //Google login
     const handleGoogleSignIn = () => {
-        signIn('google', { callbackUrl:"http://localhost:3000" })
+        signIn('google', { callbackUrl: "http://localhost:3000" })
+    }
+    //Github Login
+    const handelGitHubLogin = () => {
+        signIn('github', { callbackUrl: "http://localhost:3000" })
     }
 
     return (
@@ -33,15 +54,35 @@ const Signin = () => {
                     <p className='w-3/4 mx-auto text-gray-400'>hdhasdha</p>
                 </div>
                 {/* form */}
-                <form className='flex flex-col gap-5'>
-                    <div className={styles.input_group}>
-                        <input type='email' name='email' placeholder='Email' className={styles.input_textBox} />
+                <form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
+                    <div className={`${styles.input_group}`}>
+                        <input
+                            type='email'
+                            name='email'
+                            placeholder='Email'
+                            autoComplete='off'
+                            className={styles.input_textBox}
+                            // onChange={formik.handleChange}
+                            // value={formik.values.email} 
+                            {...formik.getFieldProps('email')}
+
+                        />
                         <span className='icon flex items-center px-4'><HiAtSymbol size={25} /></span>
                     </div>
+                    {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>}
                     <div className={styles.input_group}>
-                        <input type={`${show ? "text" : "password"}`} name='password' placeholder='password' className={styles.input_textBox} />
+                        <input
+                            type={`${show ? "text" : "password"}`}
+                            name='password'
+                            placeholder='password'
+                            className={styles.input_textBox}
+                            // onChange={formik.handleChange}
+                            // value={formik.values.password}
+                            {...formik.getFieldProps('password')}
+                        />
                         <span className='icon flex items-center px-4 cursor-pointer hover:text-[#6366f1]' onClick={() => setShow(!show)}><HiFingerPrint size={25} /></span>
                     </div>
+                    {formik.errors.password && formik.touched.password ? <span  className='text-rose-500'>{formik.errors.password}</span> : <></>}
                     <div className='input-button'>
                         <button type='submit' className={styles.button}> Login</button>
 
@@ -50,7 +91,7 @@ const Signin = () => {
                         <button type='button' className={styles.button_custom} onClick={handleGoogleSignIn}> Sigin In with Google <Image src={'/asset/google.svg'} width={20} height={20} alt='Google_logo'></Image></button>
                     </div>
                     <div className='input-button'>
-                        <button type='button' className={styles.button_custom}> Sign In with Github <Image src={'/asset/github.svg'} width={25} height={25} alt='Github_logo'></Image></button>
+                        <button type='button' className={styles.button_custom} onClick={handelGitHubLogin}> Sign In with Github <Image src={'/asset/github.svg'} width={25} height={25} alt='Github_logo'></Image></button>
                     </div>
 
                 </form>

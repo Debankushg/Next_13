@@ -12,6 +12,9 @@ const cartSlice = createSlice({
         toggleCart(state, action) {
             state.isCartOpen = action.payload;
         },
+        toggleModal(state, action) {
+            state.isModalOpen = action.payload;
+        },
         addItem(state, action) {
 
             const newItemId = action.payload.id;
@@ -51,6 +54,6 @@ const cartSlice = createSlice({
     },
 });
 
-export const { toggleCart, addItem, removeItem, incrementItem, decrementItem } =
+export const {toggleModal, toggleCart, addItem, removeItem, incrementItem, decrementItem } =
     cartSlice.actions;
 export default cartSlice.reducer;

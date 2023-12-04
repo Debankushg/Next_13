@@ -29,8 +29,9 @@ const Shoppinglist = ({ session }) => {
         const getDataAsync = async () => {
             try {
                 const data = await getEcomdata();
-                const actualData = data.map((e) => {
-                    return { ...e, price: ((e.price) * 84).toFixed(0), quantity: 1 }
+
+                const actualData = data.products.map((e) => {
+                    return { ...e, quantity: 1 }
                 })
                 setData(actualData)
                 setPrevData(actualData);
@@ -42,14 +43,13 @@ const Shoppinglist = ({ session }) => {
 
     }, [])
 
-
     const handleSearch = (event) => {
         const query = event.target.value;
         setSearchTerm(query);
         if (query === '') {
             setData(prevData);
         } else {
-            const filteredData = data.filter(item => item.category.toLowerCase().includes(query.toLowerCase()));
+            const filteredData = data.filter(item => item.title.toLowerCase().includes(query.toLowerCase()));
             setData(filteredData);
         }
     };
@@ -76,67 +76,76 @@ const Shoppinglist = ({ session }) => {
     for (let i = 1; i <= Math.ceil(data.length / itemsPerPage); i++) {
         pageNumbers.push(i);
     }
-    console.log(pageNumbers, "PageNo");
+    // console.log(pageNumbers, "PageNo");
     if (session && session.user) {
         return (
             <>
-                <div className="bg-gray-100 py-8">
-                    <div className="container mx-auto">
-                        <div className="nav_menu  flex justify-end">
-                            <div className='details'>
-                                <h5>{session?.user?.name}</h5>
-                                <h5>{session?.user?.email}</h5>
-                            </div>
-                            <div
-                                title="Cart"
-                                className="cart_icon relative cursor-pointer"
+                <div className='bg-gradient-to-r from-blue-500 to-indigo-500 flex justify-end py-2'>
+                    <div className='details  mr-10'>
+                        <h5 className='text-center  '>
+                            <span className=' bg-white relative left-16 text-orange-600 w-10 h-10 rounded-full flex items-center justify-center font-semibold'>
+                                {session?.user?.name.slice(0, 1)}
+                            </span>
+                        </h5>
+                        <h5 className=' font-semibold text-orange-100'>{session?.user?.email}</h5>
+                    </div>
+                    <div className="nav_menu  flex justify-end mr-14">
+
+                        <div
+                            title="Cart"
+                            className="cart_icon relative cursor-pointer">
+                            <Image
+                                width={50}
+                                height={50}
+                                src="https://icons.veryicon.com/png/o/miscellaneous/web-4/cart-64.png"
+                                alt="bag-icon"
                                 onClick={() => handleOpenCart(true)}
-                            >
-                                {cartItems ? 'Close Cart' : 'Open Cart'}
-                                <Image
-                                    width={50}
-                                    height={50}
-                                    src="https://icons.veryicon.com/png/o/miscellaneous/web-4/cart-64.png"
-                                    alt="bag-icon"
-                                />
-                                <span className="badge absolute top-0 right-0 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold">
-                                    {cartQuantity}
-                                </span>
-                                {cartItems && <Cart />}
-                            </div>
-                            <div className="flex justify-end rounded-lg">
-                                <button className='mt-5 px-10 py-1 rounded-sm bg-indigo-500 text-gray-50' onClick={() => signOut()}>Sign Out</button>
-                            </div>
-                        </div>
-                        <div className="text-center mb-8">
-                            <h1 className="text-3xl font-bold">Welcome to Our Store</h1>
-                        </div>
-                        <div className='flex justify-end my-8 p-6'>
-                            <input
-                                className='p-2 rounded'
-                                type="text"
-                                placeholder="Search..."
-                                value={searchTerm}
-                                onChange={handleSearch}
                             />
+                            <span className="badge absolute top-0 right-0 bg-orange-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold" onClick={() => handleOpenCart(true)}>
+                                {cartQuantity}
+                            </span>
+                            {cartItems && <Cart />}
+                        </div>
+
+                    </div>
+                    <div className="flex justify-end  mr-5 relative bottom-3">
+                        <button className='mt-5 px-8 py-1 rounded-md bg-orange-500 text-gray-50' onClick={() => signOut()}>Sign Out</button>
+                    </div>
+
+                </div>
+                <div className="bg-gray-200 py-8 ">
+                    <div className="container mx-auto ">
+
+                        <div className="text-center mb-8 ">
+                            <h1 className="text-3xl text-orange-500 font-bold">Welcome to Our Store</h1>
+
+                            <div className='flex justify-end p-6'>
+                                <input
+                                    className='p-2 rounded'
+                                    type="text"
+                                    placeholder="Search..."
+                                    value={searchTerm}
+                                    onChange={handleSearch}
+                                />
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {data.map((e) => (
                                 <div key={e.id} className="bg-white rounded-lg overflow-hidden shadow-md">
                                     <Image
-                                        src={e.image}
+                                        src={e.thumbnail}
                                         alt="Product"
                                         className="w-full h-60 object-cover p-4"
                                         width={200}
                                         height={200}
                                     />
                                     <div className="p-4">
-                                        <h2 className="text-lg font-semibold">{e.category}</h2>
-                                        <p className="text-gray-600">Price: ${e.price}</p>
+                                        <h2 className="text-lg font-semibold">{e.title}</h2>
+                                        <p className="text-gray-600">Price:  ₹{e.price}</p>
                                         <div className="flex items-center mt-2">
                                             <span className="text-yellow-400 flex items-center">
-                                                {Array.from({ length: e.rating.rate }, (_, index) => (
+                                                {Array.from({ length: e.rating }, (_, index) => (
                                                     <svg
                                                         key={index}
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -149,11 +158,11 @@ const Shoppinglist = ({ session }) => {
                                                         />
                                                     </svg>
                                                 ))}
-                                                <span className="ml-1 text-gray-600 font-bold">{e.rating.rate}</span>
+                                                <span className="ml-1 text-gray-600 font-bold">{e.rating}</span>
                                             </span>
                                         </div>
                                         <div className="mt-4 flex justify-between">
-                                            <button className="bg-amber-400 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">
+                                            <button className="bg-orange-500 hover:bg-amber-500 text-white font-bold py-2 px-4 rounded">
                                                 Buy Now
                                             </button>
                                             <button

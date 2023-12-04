@@ -19,7 +19,7 @@ export const fetchData = async () => {
 
 
 export const getEcomdata = async () => {
-   return await fetch("https://fakestoreapi.com/products").then(res => {
+   return await fetch("https://dummyjson.com/products").then(res => {
       return res.json()
    }).then(data => {
       return data

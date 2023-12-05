@@ -37,6 +37,7 @@ export const loginApi = async (login) => {
          body: JSON.stringify(
             // username: 'kminchelle',
             // password: '0lelplR',
+            //email:kminchelle@qq.com
             // expiresInMins: 60, // optional
             login
          )

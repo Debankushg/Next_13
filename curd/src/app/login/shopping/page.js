@@ -2,7 +2,8 @@
 import React, { useEffect, useState, Suspense } from 'react'
 import { getEcomdata } from "../../api/getApi"
 import { useDispatch, useSelector } from "react-redux";
-import { toggleCart, addItem } from "../../redux/slice"
+import { toggleCart, addItem, } from "../../redux/slice"
+import { useRouter } from 'next/navigation'
 import Cart from "./pages"
 import Image from 'next/image'
 import { signOut } from 'next-auth/react'
@@ -19,6 +20,10 @@ const Shoppinglist = ({ session }) => {
     // for pagination 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
+    const router = useRouter()
+    const navigate = (routeName) => {
+        router.push(routeName)
+    }
 
     const handleOpenCart = (open) => {
         dispatch(toggleCart(open));
@@ -54,6 +59,10 @@ const Shoppinglist = ({ session }) => {
         }
     };
 
+    const handleBuyNow = (e) => {
+        dispatch(addItem(e));
+        navigate('/payment')
+    }
 
     const handleAddToCart = (e) => {
         dispatch(addItem(e));
@@ -81,10 +90,19 @@ const Shoppinglist = ({ session }) => {
         return (
             <>
                 <div className='bg-gradient-to-r from-blue-500 to-indigo-500 flex justify-end py-2'>
+                    <div className='flex justify-end p-4 w-[70%]'>
+                        <input
+                            className='p-2 rounded w-[70%] focus:outline-none'
+                            type="text"
+                            placeholder="Search for Product"
+                            value={searchTerm}
+                            onChange={handleSearch}
+                        />
+                    </div>
                     <div className='details  mr-10'>
                         <h5 className='text-center  '>
                             <span className=' bg-white relative left-16 text-orange-600 w-10 h-10 rounded-full flex items-center justify-center font-semibold'>
-                                {session?.user?.name.slice(0, 1)}
+                                {(session?.user?.name) ? session?.user?.name.slice(0, 1) : (session?.user?.firstName.slice(0, 1))}
                             </span>
                         </h5>
                         <h5 className=' font-semibold text-orange-100'>{session?.user?.email}</h5>
@@ -93,7 +111,7 @@ const Shoppinglist = ({ session }) => {
 
                         <div
                             title="Cart"
-                            className="cart_icon relative cursor-pointer">
+                            className="cart_icon relative top-[5px] cursor-pointer">
                             <Image
                                 width={50}
                                 height={50}
@@ -109,7 +127,7 @@ const Shoppinglist = ({ session }) => {
 
                     </div>
                     <div className="flex justify-end  mr-5 relative bottom-3">
-                        <button className='mt-5 px-8 py-1 rounded-md bg-orange-500 text-gray-50' onClick={() => signOut()}>Sign Out</button>
+                        <button className='mt-5 px-6 py-1 rounded-md bg-orange-500 text-gray-50' onClick={() => signOut()}>Sign Out</button>
                     </div>
 
                 </div>
@@ -118,18 +136,8 @@ const Shoppinglist = ({ session }) => {
 
                         <div className="text-center mb-8 ">
                             <h1 className="text-3xl text-orange-500 font-bold">Welcome to Our Store</h1>
-
-                            <div className='flex justify-end p-6'>
-                                <input
-                                    className='p-2 rounded'
-                                    type="text"
-                                    placeholder="Search..."
-                                    value={searchTerm}
-                                    onChange={handleSearch}
-                                />
-                            </div>
                         </div>
-
+                        {/* {isModalOpen && <Modal onClose={() => handleCloseModal(false)} />} */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {data.map((e) => (
                                 <div key={e.id} className="bg-white rounded-lg overflow-hidden shadow-md">
@@ -162,7 +170,7 @@ const Shoppinglist = ({ session }) => {
                                             </span>
                                         </div>
                                         <div className="mt-4 flex justify-between">
-                                            <button className="bg-orange-500 hover:bg-amber-500 text-white font-bold py-2 px-4 rounded">
+                                            <button className="bg-orange-500 hover:bg-amber-500 text-white font-bold py-2 px-4 rounded" onClick={() => handleBuyNow(e)}>
                                                 Buy Now
                                             </button>
                                             <button
@@ -172,7 +180,10 @@ const Shoppinglist = ({ session }) => {
                                                 {isAdded ? 'Added' : 'Add to Cart'}
                                             </button>
                                         </div>
+
                                     </div>
+
+
                                 </div>
                             ))}
                         </div>

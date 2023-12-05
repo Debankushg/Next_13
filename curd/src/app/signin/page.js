@@ -31,6 +31,9 @@ const Signin = () => {
     })
 
 
+    // const handelLogin = () => {
+    //     Signin()
+    // }
 
 
     //Google login
@@ -55,7 +58,7 @@ const Signin = () => {
                 </div>
                 {/* form */}
                 <form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-                    <div className={`${styles.input_group}`}>
+                    {/* <div className={`${styles.input_group}`}>
                         <input
                             type='email'
                             name='email'
@@ -68,8 +71,22 @@ const Signin = () => {
 
                         />
                         <span className='icon flex items-center px-4'><HiAtSymbol size={25} /></span>
+                    </div> */}
+                    <div className={`${styles.input_group}`}>
+                        <input
+                            type='text'
+                            name='username'
+                            placeholder='User Name'
+                            autoComplete='off'
+                            className={styles.input_textBox}
+                        // onChange={formik.handleChange}
+                        // value={formik.values.email} 
+                        // {...formik.getFieldProps('email')}
+
+                        />
+                        <span className='icon flex items-center px-4'><HiAtSymbol size={25} /></span>
                     </div>
-                    {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>}
+                    {/* {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>} */}
                     <div className={styles.input_group}>
                         <input
                             type={`${show ? "text" : "password"}`}
@@ -82,9 +99,9 @@ const Signin = () => {
                         />
                         <span className='icon flex items-center px-4 cursor-pointer hover:text-[#6366f1]' onClick={() => setShow(!show)}><HiFingerPrint size={25} /></span>
                     </div>
-                    {formik.errors.password && formik.touched.password ? <span  className='text-rose-500'>{formik.errors.password}</span> : <></>}
+                    {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>}
                     <div className='input-button'>
-                        <button type='submit' className={styles.button}> Login</button>
+                        <button type='submit' className={styles.button} onClick={() => signIn()}> Login</button>
 
                     </div>
                     <div className='input-button'>

@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoCloseSharp } from "react-icons/io5";
-import Modal from './modal'
+import Payment from '../../payment/page'
+import { useRouter } from 'next/navigation'
 import {
     toggleCart,
     removeItem,
@@ -16,6 +17,10 @@ import Image from 'next/image'
 const Cart = () => {
     const { isCartOpen, isModalOpen, cartItems } = useSelector((state) => state.cart);
 
+    const router = useRouter()
+    const navigate = (routeName) => {
+        router.push(routeName)
+    }
 
     const dispatch = useDispatch();
 
@@ -23,8 +28,8 @@ const Cart = () => {
         dispatch(toggleCart(close));
     };
 
-    const handleOpenModal = (open) => {
-        dispatch(toggleModal(open));
+    const handleOpenModal = () => {
+        navigate('/payment')
     }
 
     const handleCloseModal = (close) => {
@@ -146,14 +151,12 @@ const Cart = () => {
                             type="button"
                             className="checkout_btn bg-orange-500 text-white text-xl px-10 py-3 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={cartQuantity === 0}
-                            onClick={() => handleOpenModal(true)}
+                            onClick={() => handleOpenModal()}
                         >
                             Checkout
                         </button>
                     </div>
                 </div>
-
-                {isModalOpen && <Modal onClose={() => handleCloseModal(false)} />}
             </div>)}
 
         </>

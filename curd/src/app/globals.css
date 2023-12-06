@@ -14,6 +14,12 @@ body {
 * {
   box-sizing: border-box;
 }
+.slick-slide>div{
+  margin: 0 2px;
+}
 
+.slick-arrow button{
+  width: 50px;
+}
 
 

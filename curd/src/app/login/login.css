@@ -1,6 +1,6 @@
 .login-menu {
+  @apply bg-gradient-to-r from-blue-500 to-indigo-500;
   display: flex;
-  background-color: gold;
   font-size: 20px;
   padding: 20px 0px;
   margin: 0px;
@@ -13,7 +13,7 @@
 }
 .login-menu a {
   text-decoration: none;
-  color: brown;
+  color:white;
 }
 .login-menu h4{
     margin: 0;

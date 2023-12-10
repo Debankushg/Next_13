@@ -11,5 +11,5 @@ const userSchema = new Schema({
 
 })
 
-const Users = models.user || model('user', userSchema,'users')
+const Users = models.user || model('user', userSchema)
 export default Users

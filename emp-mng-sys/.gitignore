@@ -28,6 +28,14 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# dotenv environment variables file
+.env
+.env.test
+
+# CRA environment variables files
+.env.production
+.env.development
+
 # vercel
 .vercel
 

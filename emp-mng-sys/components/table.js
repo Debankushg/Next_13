@@ -1,15 +1,19 @@
 import Image from "next/image";
 import { BiEdit, BiTrashAlt } from "react-icons/bi";
-import { getUser } from "../lib/helper";
+import { getUsers } from "../lib/helper";
 import { useQuery } from "react-query";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleChangeAction, updateAction ,deleteAction} from "../redux/reducer";
 
 export default function Table() {
 
 
- const {data, isLoading,isError,error}= useQuery('users',getUser)
+    const { data, isLoading, isError, error } = useQuery('users', getUsers)
 
- if(isLoading) return <div>Employee  is Loading</div>
- if(isError) return <div>Got Error {error}</div>
+
+
+    if (isLoading) return <div>Employee  is Loading</div>
+    if (isError) return <div>Got Error {error}</div>
 
 
 
@@ -45,7 +49,25 @@ export default function Table() {
 }
 
 
-const Tr = ({ id, name, avatar, email, salary, date, status }) => {
+const Tr = ({ _id, name, avatar, email, salary, date, status }) => {
+
+    const visible = useSelector((state) => state.app.client.toggleForm)
+    const dispatch = useDispatch()
+
+
+    const onUpdate = () => {
+        dispatch(toggleChangeAction(_id))
+        if (visible) {
+            dispatch(updateAction(_id))
+        }
+    }
+
+    const onDelete =() => {
+        if(!visible){
+            dispatch(deleteAction(_id))
+        }
+    }
+
     return (
         <tr className="bg-gray-50 text-center">
             <td className="px-16 py-2 flex flex-row items-center">
@@ -62,11 +84,11 @@ const Tr = ({ id, name, avatar, email, salary, date, status }) => {
                 <span>{date || "Unknown"}</span>
             </td>
             <td className="px-16 py-2">
-                <button className="cursor"><span className={`${status=== "Active" ? "bg-green-500":"bg-red-500"} text-white px-5 py-1 rounded-full`}>{status || "Unknown"}</span></button>
+                <button className="cursor"><span className={`${status === "Active" ? "bg-green-500" : "bg-red-500"} text-white px-5 py-1 rounded-full`}>{status || "Unknown"}</span></button>
             </td>
             <td className="px-16 py-2 ">
-                <button className="cursor"><BiEdit size={25} color={"rgb(34,197,94)"}></BiEdit></button>
-                <button className="cursor"><BiTrashAlt size={25} color={"rgb(244,63,94)"}></BiTrashAlt></button>
+                <button className="cursor" onClick={onUpdate}><BiEdit size={25} color={"rgb(34,197,94)"}></BiEdit></button>
+                <button className="cursor" onClick={onDelete}><BiTrashAlt size={25} color={"rgb(244,63,94)"}></BiTrashAlt></button>
             </td>
         </tr>
     )

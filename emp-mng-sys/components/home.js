@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toggleChangeAction, deleteAction } from "../redux/reducer";
 import { deleteUser, getUsers } from '../lib/helper'
 import { useQueryClient } from 'react-query'
-import { signOut } from 'next-auth/react'
 
 
 export default function Home({ session }) {
@@ -35,6 +34,9 @@ export default function Home({ session }) {
     await dispatch(deleteAction(null))
   }
 
+
+
+
   return (
     <section>
       <Head>
@@ -44,7 +46,7 @@ export default function Home({ session }) {
       </Head>
 
       <main className='py-5 bg-slate-300'>
-        <h1 className='text-xl md:text-5xl text-center font-bold py-10'> Employee Management</h1>
+        {/* <h1 className='text-xl md:text-5xl text-center font-bold py-10'> Employee Management</h1> */}
         <div className='container mx-auto flex justify-between py-5 border-b'>
           
           {!visible && <div className='left flex gap-3'>
@@ -54,13 +56,11 @@ export default function Home({ session }) {
           <div className='details  mr-10 flex'>
           <h5 className='text-center  '>
             <span className=' bg-gray-600 relative left-16 text-rose-600 w-10 h-10 rounded-full flex items-center justify-center font-semibold'>
-              {(session?.user?.name) ? session?.user?.name.slice(0, 1) : (session?.user?.firstName.slice(0, 1))}
+              {(session?.user?.email) ? session?.user?.email.slice(0, 1).toUpperCase()  : (session?.user?.firstName.slice(0, 1))}
             </span>
           </h5>
           <h5 className=' font-semibold text-rose-600 relative top-10 right-10'>{session?.user?.email}</h5>
-          <div className="flex justify-end  mr-5 bottom-3 ">
-            <button className='mt-5 px-4  rounded-md bg-red-500 text-gray-50' onClick={() => signOut()}>Sign Out</button>
-          </div>
+      
           </div>
         </div>
         {/* form */}

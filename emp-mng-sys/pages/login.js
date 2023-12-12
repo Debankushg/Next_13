@@ -7,7 +7,7 @@ import Link from 'next/link'
 import styles from "../styles/form.module.css"
 import Image from 'next/image'
 import { HiAtSymbol, HiFingerPrint } from 'react-icons/hi'
-import { signIn } from "next-auth/react"
+import { signIn ,getCsrfToken } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import { useFormik } from 'formik'
 import login_validate from "../lib/validate"
@@ -18,22 +18,35 @@ const Login = () => {
     const navigate = (routeName) => {
         router.push(routeName)
     }
-    const handleSubmit = (values) => {
-        console.log(values);
-    }
+    // const handleSubmit = (values) => {
+    //     console.log(values);
+    // }
+
+    const handleSubmit = async (values) => {
+        const status = await signIn('credentials', {
+            redirect: false,
+            email: values.email,
+            password: values.password,
+            callbackUrl: "http://localhost:3000"
+        })
+        const token = await getCsrfToken();
+        console.log(token , "TOKENENE");
+        if(status.ok && token) navigate(status.url)
+        
+       }
+
     const formik = useFormik({
         initialValues: {
             email: "",
             password: ""
         },
         validate: login_validate,
-        onSubmit: handleSubmit
+        onSubmit:handleSubmit
     })
 
 
-    // const handelLogin = () => {
-    //     Signin()
-    // }
+
+
 
 
     //Google login
@@ -58,7 +71,7 @@ const Login = () => {
                 </div>
                 {/* form */}
                 <form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-                    {/* <div className={`${styles.input_group}`}>
+                    <div className={`${styles.input_group} ${formik.errors.email && formik.touched.email ? 'border-rose-600' : ''}`}>
                         <input
                             type='email'
                             name='email'
@@ -71,8 +84,8 @@ const Login = () => {
 
                         />
                         <span className='icon flex items-center px-4'><HiAtSymbol size={25} /></span>
-                    </div> */}
-                    <div className={`${styles.input_group}`}>
+                    </div>
+                    {/* <div className={`${styles.input_group}`}>
                         <input
                             type='text'
                             name='username'
@@ -85,41 +98,41 @@ const Login = () => {
 
                         />
                         <span className='icon flex items-center px-4'><HiAtSymbol size={25} /></span>
-                    </div>
+                    </div> */}
                     {/* {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>} */}
-                    <div className={styles.input_group}>
+                    <div className={`${styles.input_group} ${formik.errors.password && formik.touched.password  ? 'border-rose-600' : ''}`}>
                         <input
                             type={`${show ? "text" : "password"}`}
-                            name='password'
-                            placeholder='password'
-                            className={styles.input_textBox}
-                            // onChange={formik.handleChange}
-                            // value={formik.values.password}
-                            {...formik.getFieldProps('password')}
-                        />
-                        <span className='icon flex items-center px-4 cursor-pointer hover:text-[#6366f1]' onClick={() => setShow(!show)}><HiFingerPrint size={25} /></span>
-                    </div>
-                    {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>}
-                    <div className='input-button'>
-                        <button type='submit' className={styles.button} onClick={() => signIn()}> Login</button>
+                        name='password'
+                        placeholder='password'
+                        className={styles.input_textBox}
+                        // onChange={formik.handleChange}
+                        // value={formik.values.password}
+                        {...formik.getFieldProps('password')}
+                    />
+                    <span className='icon flex items-center px-4 cursor-pointer hover:text-[#6366f1]' onClick={() => setShow(!show)}><HiFingerPrint size={25} /></span>
+                </div>
+                {/* {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>} */}
+                <div className='input-button'>
+                    <button type='submit' className={styles.button}> Login</button>
 
-                    </div>
-                    <div className='input-button'>
-                        <button type='button' className={styles.button_custom} onClick={handleGoogleSignIn}> Sigin In with Google <Image src={'/asset/google.svg'} width={20} height={20} alt='Google_logo'></Image></button>
-                    </div>
-                    <div className='input-button'>
-                        <button type='button' className={styles.button_custom} onClick={handelGitHubLogin}> Sign In with Github <Image src={'/asset/github.svg'} width={25} height={25} alt='Github_logo'></Image></button>
-                    </div>
+                </div>
+                <div className='input-button'>
+                    <button type='button' className={styles.button_custom} onClick={handleGoogleSignIn}> Sigin In with Google <Image src={'/asset/google.svg'} width={20} height={20} alt='Google_logo'></Image></button>
+                </div>
+                <div className='input-button'>
+                    <button type='button' className={styles.button_custom} onClick={handelGitHubLogin}> Sign In with Github <Image src={'/asset/github.svg'} width={25} height={25} alt='Github_logo'></Image></button>
+                </div>
 
-                </form>
+            </form>
 
-                <p className='text-center text-gray-400'>
-                    Dont have an account? <Link href={'/register'}><span className='text-blue-700'>Sign Up</span></Link>
-                </p>
+            <p className='text-center text-gray-400'>
+                Dont have an account? <Link href={'/register'}><span className='text-blue-700'>Sign Up</span></Link>
+            </p>
 
-            </section>
+        </section>
 
-        </Layout>
+        </Layout >
     )
 
 }

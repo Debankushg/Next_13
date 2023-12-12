@@ -42,7 +42,7 @@ export default function Table() {
                 </tr>
             </thead>
             <tbody className="bg-gray-200">
-                {data.map((obj, I) => <Tr {...obj} key={I} />)}
+                {data.data.map((obj, I) => <Tr {...obj} key={I} />)}
             </tbody>
         </table>
     )

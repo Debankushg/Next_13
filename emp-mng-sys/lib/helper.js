@@ -52,13 +52,31 @@ export async function updateUser(userId, formData) {
 
 
 // Delete a new user
-export async function deleteUser(userId){
+export async function deleteUser(userId) {
     const Options = {
-        method : 'DELETE',
-        headers : { 'Content-Type': "application/json"},
+        method: 'DELETE',
+        headers: { 'Content-Type': "application/json" },
     }
 
     const response = await fetch(`${BASE_URL}/api/users?userId=${userId}`, Options)
     const json = await response.json()
     return json;
+}
+
+// Registration
+export const registerUser = async (val) => {
+    try {
+        const data = {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(val)
+        }
+        await fetch(`${BASE_URL}/api/auth/signup`, data)
+            .then(res => res.json())
+            .then((data) => {
+                if (data) router.push(`${BASE_URL}`)
+            })
+    } catch (err) {
+        return err
+    }
 }

@@ -18,9 +18,7 @@ const Login = () => {
     const navigate = (routeName) => {
         router.push(routeName)
     }
-    // const handleSubmit = (values) => {
-    //     console.log(values);
-    // }
+
 
     const handleSubmit = async (values) => {
         const status = await signIn('credentials', {
@@ -30,7 +28,7 @@ const Login = () => {
             callbackUrl: "http://localhost:3000"
         })
         const token = await getCsrfToken();
-        console.log(token , "TOKENENE");
+
         if(status.ok && token) navigate(status.url)
         
        }

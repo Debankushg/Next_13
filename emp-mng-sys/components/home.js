@@ -53,15 +53,7 @@ export default function Home({ session }) {
             <button className='flex bg-indigo-500 text-white px-[10px] py-[15px] border rounded-md hover:bg-gray-50 hover:border-indigo-500 hover hover:text-indigo-500' onClick={handleAddEmp}>Add Employee <span className='px-1'><BiUserPlus size={23} /> </span> </button>
           </div>}
           {deleteId && Delete({ deleteHandler, cancelHandler })}
-          <div className='details  mr-10 flex'>
-          <h5 className='text-center  '>
-            <span className=' bg-gray-600 relative left-16 text-rose-600 w-10 h-10 rounded-full flex items-center justify-center font-semibold'>
-              {(session?.user?.email) ? session?.user?.email.slice(0, 1).toUpperCase()  : (session?.user?.firstName.slice(0, 1))}
-            </span>
-          </h5>
-          <h5 className=' font-semibold text-rose-600 relative top-10 right-10'>{session?.user?.email}</h5>
-      
-          </div>
+       
         </div>
         {/* form */}
 

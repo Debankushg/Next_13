@@ -6,10 +6,26 @@ import Users from '../model/user'
 export async function getUsers(req, res) {
     try {
         const users = await Users.find({})
-        const count = await Users.countDocuments({status:"Active"})
+        const activeCount = await Users.countDocuments({ status: "Active" })
+        const inactiveCount = await Users.countDocuments({ status: "Inactive" })
+        const employeeSalary = []
+        users.map((e) => {
+            employeeSalary.push({ name: e.name, salary: e.salary })
+        })
         const total = await Users.countDocuments({})
+
         if (!users) return res.status(404).json({ error: "Data not Found" })
-        const data={data:users,activeCount:count,totalCount:total}
+        const activeStatus = {
+            data: [{ name: "Active Employee", value: activeCount, color: "#12a120" },
+            { name: "Total Employee", value: total, color: "#9099ad" }],
+            totalCount: total
+        }
+        const inactiveStatus = {
+            data: [{ name: "Inactive Employee", value: inactiveCount, color: "#fa493c" },
+            { name: "Total Employee", value: total, color: "#9099ad" }],
+            totalCount: total
+        }
+        const data = { data: users, activeStatus: activeStatus, inactiveStatus: inactiveStatus, salary: employeeSalary }
         res.status(200).json(data)
     } catch (error) {
         res.status(404).json({ error: "Error While Fetching Data" + error })

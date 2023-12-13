@@ -6,14 +6,31 @@ import Link from 'next/link'
 import styles from "../styles/form.module.css"
 import { HiAtSymbol, HiFingerPrint, HiOutlineUser } from 'react-icons/hi'
 import { useFormik } from 'formik'
-import { register_validate } from "../lib/validate"
 import { useMutation } from 'react-query'
+import { useRouter } from 'next/navigation'
+import { register_validate } from "../lib/validate"
+import { registerUser } from '../lib/helper'
+
 
 
 const Register = () => {
 
-  const handleSubmit = (val) => {
-    console.log(val);
+  const router = useRouter()
+  const navigate = (routeName) => {
+    router.push(routeName)
+  }
+  const addUser = useMutation(['REGISTER_USER'], registerUser, {
+    onSuccess: () => {
+      console.log("I had Signed up");
+      navigate("http://localhost:3000")
+    },
+    onError: (err) => {
+      console.log("I had not Signed up.....", err.message);
+    }
+  })
+
+  const handleSubmit = async (val) => {
+    addUser.mutate(val)
   }
   const formik = useFormik({
     initialValues: {
@@ -25,6 +42,10 @@ const Register = () => {
     validate: register_validate,
     onSubmit: handleSubmit
   })
+
+
+
+
 
 
 
@@ -75,7 +96,7 @@ const Register = () => {
             <span className='icon flex items-center px-4 cursor-pointer hover:text-[#6366f1]' onClick={() => setShow({ ...show, password: !show.password })}><HiFingerPrint size={25} /></span>
           </div>
           {/* {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>} */}
-          <div className={`${styles.input_group} ${formik.errors.cpassword && formik.touched.cpassword ? 'border-rose-600':''}`}>
+          <div className={`${styles.input_group} ${formik.errors.cpassword && formik.touched.cpassword ? 'border-rose-600' : ''}`}>
             <input
               type={`${show.cpassword ? "text" : "password"}`}
               name='cpassword'

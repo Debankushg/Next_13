@@ -7,9 +7,8 @@ const userSchema = new Schema({
     email: String,
     salary: String,
     date: String,
-    status: String
-
+    status: String,
 })
 
-const Users = models.user || model('user', userSchema,'users')
+const Users = models.user || model('user', userSchema)
 export default Users

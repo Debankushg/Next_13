@@ -3,30 +3,47 @@ import React, { useReducer } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import Success from './success'
 import Bug from './bug'
+import { useQueryClient, useMutation } from 'react-query'
+import { addUser, getUsers } from '../lib/helper'
 
-const formReducer = (state, event) => {
-    return {
-        ...state, [event.target.name]: event.target.value
-    }
-}
 
-const AddUserForm = () => {
 
-    const [formData, setFormData] = useReducer(formReducer, {})
+const AddUserForm = ({formData,setFormData}) => {
+
+
+    const queryClient = useQueryClient()
+
+    const addMutation = useMutation(addUser, {
+        onSuccess: () => {
+            queryClient.prefetchQuery('users', getUsers)
+        }
+    })
+
     const handelSubmit = (e) => {
         e.preventDefault()
         if (Object.keys(formData) == 0) {
             return console.log('Dont have Data');
         }
-        console.log(formData);
-    }
-    
-        if(Object.keys(formData).length>0){
-           return <Success message={'Data Added...!!'}/>
+
+        let { firstname, lastname, email, salary, date, status } = formData
+        const model = {
+            name: `${firstname} ${lastname}`,
+            avatar: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 10)}.jpg`,
+            email, salary, date, status: status ?? "Active"
         }
+        addMutation.mutate(model)
+
+    }
+
+
+    // if (Object.keys(formData).length > 0) return <Bug message={'Error...!!'} />
+    if (addMutation.isLoading) return <div>Loading...</div>
+    if (addMutation.isError) return <Bug message={addMutation.error.message} />
+    if (addMutation.isSuccess) return <Success message={'Added Successfully...'} />
 
     return (
         <form className='grid lg:grid-col-2 w-4/6 gap-4 ' onSubmit={handelSubmit}>
+          <h1  className='flex justify-center text-2xl font-bold'>Add Employee Details</h1>
             <div className='input-type'>
                 <input type='text' onChange={setFormData} placeholder='First Name' name='firstname' className='w-full px-5 py-3  focus:outline-none rounded-md border' />
             </div>

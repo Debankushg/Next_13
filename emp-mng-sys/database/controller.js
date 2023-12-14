@@ -6,8 +6,27 @@ import Users from '../model/user'
 export async function getUsers(req, res) {
     try {
         const users = await Users.find({})
+        const activeCount = await Users.countDocuments({ status: "Active" })
+        const inactiveCount = await Users.countDocuments({ status: "Inactive" })
+        const employeeSalary = []
+        users.map((e) => {
+            employeeSalary.push({ name: e.name, salary: e.salary })
+        })
+        const total = await Users.countDocuments({})
+
         if (!users) return res.status(404).json({ error: "Data not Found" })
-        res.status(200).json(users)
+        const activeStatus = {
+            data: [{ name: "Active Employee", value: activeCount, color: "#12a120" },
+            { name: "Total Employee", value: total, color: "#9099ad" }],
+            totalCount: total
+        }
+        const inactiveStatus = {
+            data: [{ name: "Inactive Employee", value: inactiveCount, color: "#fa493c" },
+            { name: "Total Employee", value: total, color: "#9099ad" }],
+            totalCount: total
+        }
+        const data = { data: users, activeStatus: activeStatus, inactiveStatus: inactiveStatus, salary: employeeSalary }
+        res.status(200).json(data)
     } catch (error) {
         res.status(404).json({ error: "Error While Fetching Data" + error })
     }
@@ -15,13 +34,13 @@ export async function getUsers(req, res) {
 
 
 //GET: http://localhost:3000/api/users/userId
-export async function getUser (req, res){
+export async function getUser(req, res) {
     try {
-        
-        const {userId} = req.query;
-        
-        if(userId){
+        const { userId } = req.query;
+
+        if (userId) {
             const user = await Users.findById(userId)
+
             res.status(200).json(user)
         }
         res.status(404).json({ error: "User Not selected" })
@@ -30,6 +49,7 @@ export async function getUser (req, res){
         res.status(404).json({ error: "Cannot get the user..!" })
     }
 }
+
 
 //POST: http://localhost:3000/api/users
 export async function postUsers(req, res) {
